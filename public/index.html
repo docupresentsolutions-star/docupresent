@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocuPresent Solutions</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════ LOGIN PAGE -->
+  <div id="login-page" class="page active">
+    <div class="login-bg-glow"></div>
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-logo-wrap">
+          <img src="images/logo.png" alt="DocuPresent Solutions Logo" class="brand-logo" />
+        </div>
+        <h1>DocuPresent Solutions</h1>
+        <p>Project Documentation &amp; Presentations</p>
+      </div>
+
+      <!-- Email Step -->
+      <div id="email-step">
+        <label class="field-label">Enter your Email to Login</label>
+        <div class="input-row">
+          <input id="login-email" type="email" class="inp" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <button id="send-otp-btn" class="btn-primary" onclick="sendOTP()">Send OTP →</button>
+        <div id="email-error" class="err-msg"></div>
+      </div>
+
+      <!-- OTP Step -->
+      <div id="otp-step" style="display:none">
+        <div class="otp-hint">
+          OTP sent to <span id="otp-email-display"></span>
+          <button class="btn-link" onclick="backToEmail()">Change</button>
+        </div>
+        <label class="field-label">Enter 6-digit OTP</label>
+        <div class="input-row">
+          <input id="login-otp" type="text" class="inp otp-inp" placeholder="_ _ _ _ _ _" maxlength="6" inputmode="numeric" />
+        </div>
+        <button id="verify-otp-btn" class="btn-primary" onclick="verifyOTP()">Verify &amp; Login →</button>
+        <button class="btn-ghost" onclick="resendOTP()">Resend OTP</button>
+        <div id="otp-error" class="err-msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ DASHBOARD PAGE -->
+  <div id="dashboard-page" class="page">
+
+    <!-- Header -->
+    <header class="dash-header">
+      <div class="dash-brand">
+        <img src="images/logo.png" alt="DocuPresent Solutions" class="dash-logo" />
+        <span class="dash-title">DocuPresent Solutions</span>
+      </div>
+      <div class="dash-user">
+        <span id="user-email-display" class="user-email"></span>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dash-main">
+
+      <!-- ── Home Menu (vertical list) ── -->
+      <div id="home-menu">
+        <h2 class="section-heading">What would you like to do?</h2>
+        <div class="menu-list">
+
+          <button class="menu-card" onclick="showSection('new-order')">
+            <div class="menu-card-left">
+              <span class="menu-icon">📦</span>
+              <div>
+                <div class="menu-card-title">New Order</div>
+                <div class="menu-card-sub">Place a new project order</div>
+              </div>
+            </div>
+            <span class="menu-arrow">›</span>
+          </button>
+
+          <button class="menu-card" onclick="showSection('recent-orders')">
+            <div class="menu-card-left">
+              <span class="menu-icon">📋</span>
+              <div>
+                <div class="menu-card-title">Recent Orders</div>
+                <div class="menu-card-sub">View your past orders</div>
+              </div>
+            </div>
+            <span class="menu-arrow">›</span>
+          </button>
+
+          <button class="menu-card" onclick="showSection('pending-payments')">
+            <div class="menu-card-left">
+              <span class="menu-icon">⏳</span>
+              <div>
+                <div class="menu-card-title">Pending Payments</div>
+                <div class="menu-card-sub">Complete your remaining dues</div>
+              </div>
+            </div>
+            <span class="menu-arrow">›</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- ── Section: New Order ── -->
+      <div id="section-new-order" class="section" style="display:none">
+        <div class="section-header">
+          <button class="back-btn" onclick="showHome()">← Back</button>
+          <h2 class="section-heading">New Order</h2>
+        </div>
+
+        <div class="form-card">
+          <div class="form-group">
+            <label class="field-label">Full Name *</label>
+            <input id="order-name" type="text" class="inp" placeholder="Enter your full name" />
+          </div>
+          <div class="form-group">
+            <label class="field-label">Phone Number *</label>
+            <input id="order-phone" type="tel" class="inp" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" />
+          </div>
+          <div class="form-group">
+            <label class="field-label">Project Title *</label>
+            <input id="order-project" type="text" class="inp" placeholder="Enter your project title" />
+          </div>
+          <div class="form-group">
+            <label class="field-label">College Name *</label>
+            <input id="order-college" type="text" class="inp" placeholder="Enter your college name" />
+          </div>
+          <div class="form-group">
+            <label class="field-label">Select Package *</label>
+            <div class="pkg-cards" id="pkg-cards">
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+
+          <div id="order-error" class="err-msg"></div>
+          <button id="order-submit-btn" class="btn-primary" onclick="submitOrder()" style="display:none">
+            Pay Advance &amp; Confirm Order →
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Section: Recent Orders ── -->
+      <div id="section-recent-orders" class="section" style="display:none">
+        <div class="section-header">
+          <button class="back-btn" onclick="showHome()">← Back</button>
+          <h2 class="section-heading">Recent Orders</h2>
+        </div>
+        <div id="recent-orders-list" class="orders-list">
+          <div class="loader">Loading orders…</div>
+        </div>
+      </div>
+
+      <!-- ── Section: Pending Payments ── -->
+      <div id="section-pending-payments" class="section" style="display:none">
+        <div class="section-header">
+          <button class="back-btn" onclick="showHome()">← Back</button>
+          <h2 class="section-heading">Pending Payments</h2>
+        </div>
+        <div id="pending-payments-list" class="orders-list">
+          <div class="loader">Loading payments…</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Payment success overlay -->
+  <div id="payment-success-overlay" style="display:none" class="overlay">
+    <div class="overlay-card">
+      <div class="success-icon">✅</div>
+      <h2>Order Confirmed!</h2>
+      <p id="success-message"></p>
+      <button class="btn-primary" onclick="closeSuccessOverlay()">Done</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
